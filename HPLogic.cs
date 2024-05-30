@@ -1,0 +1,48 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class HPLogic : MonoBehaviour
+{
+    public float destroyTime = 5f;
+    public float Regen =0f;
+
+    void Start()
+    {
+        // Invoke the DestroyObject method after 'destroyTime' seconds
+        Invoke("DestroyObject", destroyTime);
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        
+    }
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Player") || other.CompareTag("Undetectable"))
+        {
+            player playerhealth = other.GetComponent<player>();
+
+            if (playerhealth != null && playerhealth.health <= playerhealth.maxHealth)
+            {
+                // Increment the gold count variable
+                Regen = playerhealth.maxHealth*0.2f;
+                playerhealth.health+=Regen;
+
+                    if(playerhealth.health >= playerhealth.maxHealth)
+                    {
+                        playerhealth.health = playerhealth.maxHealth;
+                    }
+
+                // Destroy the coin GameObject after it is collected
+                Destroy(gameObject);
+            }
+        }
+    }
+    void DestroyObject()
+    {
+        // Destroy the GameObject this script is attached to
+        Destroy(gameObject);
+    }
+}
